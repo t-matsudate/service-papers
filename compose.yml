@@ -21,11 +21,11 @@ networks:
     ipam:
       driver: default
       config:
-        subnet: 127.0.0.0/24
-        gateway: 127.0.0.254
+        - subnet: 127.0.0.0/24
+          gateway: 127.0.0.254
   backend:
     ipam:
       driver: default
       config:
-        subnet: 127.0.1.0/24
-        gateway: 127.0.1.254
+        - subnet: 127.0.1.0/24
+          gateway: 127.0.1.254
