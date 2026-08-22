@@ -3,29 +3,29 @@ services:
     image: ubuntu:26.04
     networks:
       frontend:
-        ipv4_address: 127.0.0.1
+        ipv4_address: 192.168.0.1
       backend:
-        ipv4_address: 127.0.1.1
+        ipv4_address: 192.168.1.1
   api:
     image: ubuntu:26.04
     networks:
       backend:
-        ipv4_address: 127.0.1.2
+        ipv4_address: 192.168.1.2
   admin:
     image: ubuntu:26.04
     networks:
       backend:
-        ipv4_address: 127.0.1.3
+        ipv4_address: 192.168.1.3
 networks:
   frontend:
     ipam:
       driver: default
       config:
-        - subnet: 127.0.0.0/24
-          gateway: 127.0.0.254
+        - subnet: 192.168.0.0/24
+          gateway: 192.168.0.254
   backend:
     ipam:
       driver: default
       config:
-        - subnet: 127.0.1.0/24
-          gateway: 127.0.1.254
+        - subnet: 192.168.1.0/24
+          gateway: 192.168.1.254
