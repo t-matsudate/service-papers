@@ -1,27 +1,33 @@
 name: Testing ICMP request to service containers
 on: push
 jobs:
-  icmp:
+  nc:
     name: Compose service containers
     runs-on: ubuntu-24.04
     steps:
+      - id: install-netcat
+        name: Install netcat-traditional
+        run: |
+          apt update
+          apt install netcat-traditional
+          alias nc=nc.traditional
       - id: checkout
         name: Checkout repository
         uses: actions/checkout@v7
       - id: compose-up
         name: Run compose up
         run: docker compose up
-      - id: ping-counter
+      - id: netcat-counter
         name: Send a Ping request to the counter host
         run: |
-          ping -c 1 192.168.0.1
-          ping -c 1 192.168.1.1
-      - id: ping-api
+          nc -z 192.168.0.1 8000-8999
+          nc -z 192.168.1.1 8000-8999
+      - id: netcat-api
         name: Send a Ping request to the api host
-        run: ping -c 1 192.168.1.2
-      - id: ping-admin
+        run: nc -z 192.168.1.2 8000-8999
+      - id: netcat-admin
         name: Send a Ping request to the admin host
-        run: ping -c 1 192.168.1.3
+        run: nc -z 192.168.1.3 8000-8999
       - id: compose-down
         name: Run compose down
         if: ${{ always() }}
