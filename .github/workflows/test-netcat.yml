@@ -20,14 +20,13 @@ jobs:
       - id: netcat-counter
         name: With the counters
         run: |
-          nc -z 192.168.0.1 8000-8999
-          nc -z 192.168.1.1 8000-8999
+          nc -z 127.0.0.1 8000-8009
       - id: netcat-api
         name: With the api
-        run: nc -z 192.168.1.2 8000-8999
+        run: nc -z 127.0.0.1 8010-8019
       - id: netcat-admin
         name: With the admin
-        run: nc -z 192.168.1.3 8000-8999
+        run: nc -z 127.0.0.1 8020-8029
       - id: compose-down
         name: Compose down
         if: ${{ always() }}
