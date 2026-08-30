@@ -1,4 +1,4 @@
-name: Testing ICMP request to service containers
+name: Making sure netcat connections with service containers
 on: push
 jobs:
   nc:
@@ -8,27 +8,27 @@ jobs:
       - id: install-netcat
         name: Installing netcat-traditional
         run: |
-          apt update
-          apt install netcat-traditional
+          sudo apt update
+          sudo apt install -y netcat-traditional
           alias nc=nc.traditional
       - id: checkout
-        name: Checking out repository
+        name: Checkout
         uses: actions/checkout@v7
       - id: compose-up
-        name: Running compose up
+        name: Compose up
         run: docker compose up
       - id: netcat-counter
-        name: Making sure connections with the counter
+        name: With the counters
         run: |
           nc -z 192.168.0.1 8000-8999
           nc -z 192.168.1.1 8000-8999
       - id: netcat-api
-        name: Making sure a connection with the api
+        name: With the api
         run: nc -z 192.168.1.2 8000-8999
       - id: netcat-admin
-        name: Making sure a connection with the admin
+        name: With the admin
         run: nc -z 192.168.1.3 8000-8999
       - id: compose-down
-        name: Running compose down
+        name: Compose down
         if: ${{ always() }}
         run: docker compose down
