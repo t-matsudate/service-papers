@@ -6,29 +6,29 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - id: install-netcat
-        name: Install netcat-traditional
+        name: Installing netcat-traditional
         run: |
           apt update
           apt install netcat-traditional
           alias nc=nc.traditional
       - id: checkout
-        name: Checkout repository
+        name: Checking out repository
         uses: actions/checkout@v7
       - id: compose-up
-        name: Run compose up
+        name: Running compose up
         run: docker compose up
       - id: netcat-counter
-        name: Send a Ping request to the counter host
+        name: Making sure connections with the counter
         run: |
           nc -z 192.168.0.1 8000-8999
           nc -z 192.168.1.1 8000-8999
       - id: netcat-api
-        name: Send a Ping request to the api host
+        name: Making sure a connection with the api
         run: nc -z 192.168.1.2 8000-8999
       - id: netcat-admin
-        name: Send a Ping request to the admin host
+        name: Making sure a connection with the admin
         run: nc -z 192.168.1.3 8000-8999
       - id: compose-down
-        name: Run compose down
+        name: Running compose down
         if: ${{ always() }}
         run: docker compose down
