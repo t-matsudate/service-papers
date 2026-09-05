@@ -1,6 +1,6 @@
 services:
   counter:
-    image: ubuntu:26.04
+    image: tmatsudate/payment-counter:latest
     networks:
       frontend:
         ipv4_address: 192.168.0.1
@@ -9,14 +9,14 @@ services:
     ports:
       - "127.0.0.1:8000-8009:80"
   api:
-    image: ubuntu:26.04
+    image: tmatsudate/payment-api:latest
     networks:
       backend:
         ipv4_address: 192.168.1.2
     ports:
       - "127.0.0.1:8010-8019:80"
   admin:
-    image: ubuntu:26.04
+    image: tmatsudate/payment-admin:latest
     networks:
       backend:
         ipv4_address: 192.168.1.3

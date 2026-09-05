@@ -1,8 +1,12 @@
-name: Making sure netcat connections with service containers
-on: push
+name: NetCat
+on:
+  workflow_run:
+    workflows: [Service Containers]
+    types: [completed]
 jobs:
   nc:
-    name: Compose service containers
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+    name: Running netcat to service containers
     runs-on: ubuntu-24.04
     steps:
       - id: install-netcat

@@ -1,0 +1,81 @@
+name: Service Containers
+on: push
+jobs:
+  counter:
+    name: Push Counter
+    runs-on: ubuntu-24.04
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v7
+      - id: setup-qemu
+        name: Setup Qemu
+        uses: docker/setup-qemu-action@v4
+      - id: setup-buildx
+        name: Setup Buildx
+        uses: docker/setup-buildx-action@v4
+      - id: login
+        name: Login to Docker Hub
+        uses: docker/login@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - id: push
+        name: Build and Push the image.
+        uses: docker/build-push-action@v7
+        with:
+          file: ./Dockerfile.counter
+          push: true
+          tags: tmatsudate/payment-counter:latest
+  api:
+    name: Push API
+    runs-on: ubuntu-24.04
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v7
+      - id: setup-qemu
+        name: Setup Qemu
+        uses: docker/setup-qemu-action@v4
+      - id: setup-buildx
+        name: Setup Buildx
+        uses: docker/setup-buildx-action@v4
+      - id: login
+        name: Login to Docker Hub
+        uses: docker/login@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - id: push
+        name: Build and Push the image.
+        uses: docker/build-push-action@v7
+        with:
+          file: ./Dockerfile.api
+          push: true
+          tags: tmatsudate/payment-api:latest
+  admin:
+    name: Push Admin
+    runs-on: ubuntu-24.04
+    steps:
+      - id: checkout
+        name: Checkout
+        uses: actions/checkout@v7
+      - id: setup-qemu
+        name: Setup Qemu
+        uses: docker/setup-qemu-action@v4
+      - id: setup-buildx
+        name: Setup Buildx
+        uses: docker/setup-buildx-action@v4
+      - id: login
+        name: Login to Docker Hub
+        uses: docker/login@v4
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+      - id: push
+        name: Build and Push the image.
+        uses: docker/build-push-action@v7
+        with:
+          file: ./Dockerfile.admin
+          push: true
+          tags: tmatsudate/payment-admin:latest
