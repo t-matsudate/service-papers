@@ -23,14 +23,15 @@ jobs:
         run: docker compose up -d
       - id: netcat-counter
         name: With the counters
-        run: |
-          nc -z 127.0.0.1 8000-8009
+        run: nc -z 127.0.0.1 8000-8009
       - id: netcat-api
         name: With the api
-        run: ! nc -z 127.0.0.1 8010-8019
+        run: |
+          ! nc -z 127.0.0.1 8010-8019
       - id: netcat-admin
         name: With the admin
-        run: ! nc -z 127.0.0.1 8020-8029
+        run: |
+          ! nc -z 127.0.0.1 8020-8029
       - id: compose-down
         name: Compose down
         if: ${{ always() }}
