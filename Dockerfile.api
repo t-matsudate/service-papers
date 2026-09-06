@@ -1,12 +1,16 @@
 FROM ubuntu:resolute
+
 EXPOSE 80
 
 RUN apt update
 RUN apt install -y nginx php-fpm
+RUN rm /etc/nginx/sites-available/default
+RUN rm /etc/nginx/sites-enabled/default
 
-ADD ./etc/nginx/nginx.conf /etc/nginx/nginx.conf
+ADD ./etc/nginx/docker/nginx.conf /etc/nginx/nginx.conf
 ADD ./var/www/index.php /var/www/index.php
+ADD ./entrypoint.sh .
 
-RUN groupadd nginx
-RUN useradd -g nginx nginx
-CMD nginx -g "daemon off;"
+RUN chmod +x ./entrypoint.sh
+
+CMD ["./entrypoint.sh"]

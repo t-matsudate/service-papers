@@ -1,4 +1,4 @@
-name: NetCat
+name: Testing Network
 on:
   workflow_run:
     workflows: [Service Containers]
@@ -20,17 +20,48 @@ jobs:
         uses: actions/checkout@v7
       - id: compose-up
         name: Compose up
-        run: docker compose up -d
-      - id: netcat-counter
+        run: |
+          # 何故かワークフローの中で直近のネットワークが生き残る(キャッシュしてないのに・・・)
+          docker compose down --volumes --remove-orphans
+          docker network prune -f
+
+          docker compose up -d
+      - id: test-counter
         name: With the counters
         run: |
-          nc -z 127.0.0.1 8000-8009
-      - id: netcat-api
+          nc -z 127.0.0.1 8000
+
+          # Dockerネットワーク構築完了を確実に待機
+          sleep 3
+
+          curl http://127.0.0.1:8000
+      - id: test-api
         name: With the api
-        run: ! nc -z 127.0.0.1 8010-8019
-      - id: netcat-admin
+        run: |
+          ! nc -z 127.0.0.1 8001
+      - id: test-admin
         name: With the admin
-        run: ! nc -z 127.0.0.1 8020-8029
+        run: |
+          ! nc -z 127.0.0.1 8002
+      - id: install-nginx
+        name: Installing Nginx
+        run: |
+          sudo apt install -y nginx
+          sudo rm /etc/nginx/sites-available/default
+          sudo rm /etc/nginx/sites-enabled/default
+          sudo cp -f ./etc/nginx/proxy/nginx.conf /etc/nginx/nginx.conf
+          sudo systemctl restart nginx
+      - id: test-proxy
+        name: With the proxy
+        run: |
+          nc -z 127.0.0.1 80
+          curl http://127.0.0.1
+      - id: check-journal
+        name: Checking journal logs
+        if: ${{ failure() }}
+        run: |
+          sudo journalctl -xeu nginx.service
+          docker compose logs counter
       - id: compose-down
         name: Compose down
         if: ${{ always() }}
