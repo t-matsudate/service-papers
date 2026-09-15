@@ -38,7 +38,7 @@ jobs:
           ! nc -z 127.0.0.1 8020-8029
       - id: netcat-proxy
         name: With the proxy
-        run: nc -z nginx 80
+        run: nc -z 127.0.0.1 ${{ job.services.nginx.ports['80'] }}
       - id: compose-down
         name: Compose down
         if: ${{ always() }}
