@@ -39,6 +39,11 @@ jobs:
       - id: netcat-proxy
         name: With the proxy
         run: nc -z 127.0.0.1 ${{ job.services.nginx.ports['80'] }}
+      - id: curl-proxy
+        name: Dumping Response
+        run: |
+          sudo apt install -y curl
+          curl http://127.0.0.1:${{ job.services.nginx.ports['80'] }}
       - id: compose-down
         name: Compose down
         if: ${{ always() }}
