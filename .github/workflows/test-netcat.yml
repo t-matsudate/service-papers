@@ -38,6 +38,8 @@ jobs:
           sudo apt install -y nginx
           sudo rm /etc/nginx/sites-available/default
           sudo cp -f ./etc/nginx/proxy/nginx.conf /etc/nginx/nginx.conf
+          sudo groupadd nginx
+          sudo useradd -g nginx nginx
           sudo systemctl restart nginx
       - id: check-journal
         name: Checking journal logs
