@@ -8,10 +8,6 @@ jobs:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
     name: Running netcat to service containers
     runs-on: ubuntu-24.04
-    services:
-      nginx:
-        image: tmatsudate/payment-proxy:latest
-        ports: [80]
     steps:
       - id: install-netcat
         name: Installing netcat-traditional
@@ -36,14 +32,19 @@ jobs:
         name: With the admin
         run: |
           ! nc -z 127.0.0.1 8020-8029
+      - id: install-nginx
+        name: Installing Nginx
+        run: |
+          sudo apt install -y nginx
+          sudo rm /etc/nginx/sites-available/default
+          sudo cp -f ./etc/nginx/proxy/nginx.conf /etc/nginx/nginx.conf
+          sudo systemctl restart nginx
       - id: netcat-proxy
         name: With the proxy
-        run: nc -z 127.0.0.1 ${{ job.services.nginx.ports['80'] }}
+        run: nc -z 127.0.0.1 80
       - id: curl-proxy
         name: Dumping Response
-        run: |
-          sudo apt install -y curl
-          curl http://127.0.0.1:${{ job.services.nginx.ports['80'] }}
+        run: curl http://127.0.0.1
       - id: compose-down
         name: Compose down
         if: ${{ always() }}
