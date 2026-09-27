@@ -4,9 +4,9 @@ on:
     workflows: [Service Containers]
     types: [completed]
 jobs:
-  nc:
+  http:
     if: ${{ github.event.workflow_run.conclusion == 'success' }}
-    name: Running netcat to service containers
+    name: Testing HTTP connections to service containers
     runs-on: ubuntu-24.04
     steps:
       - id: install-netcat
